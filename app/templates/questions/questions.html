@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %} Questions {% endblock %}
+{% block head %}
+    {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='questions.css') }}">
+{% endblock %}
+
+{% block page_content %}
+    
+  <div class="page-header">
+      <a href="{{ url_for('questions.write') }}" class="btn btn-primary pull-right">
+      <span class="glyphicon glyphicon-bullhorn"></span>Ask Question
+    </a>
+    <h1>Questions</h1>
+  </div>
+  <div class="questions">
+    <ul class="nav nav-tabs" style="margin-bottom: 1.4em">
+      <li{% if active == 'unanswered' %} class="active"{% endif %}><a href="">Unanswered</a></li>
+      <li{% if active == 'answered' %} class="active"{% endif %}><a href="">Answered</a></li>
+      <li{% if active == 'all' %} class="active"{% endif %}><a href="">All Questions</a></li>
+    </ul>
+    {% if questions %}
+    {% for question in questions %}
+    {% include 'questions/_question.html' %}
+    {% endfor %}
+    {% else %}
+      <h4 class="no-data">No question to display</h4>
+    {% endif %}
+  </div>
+    
+  {% block scripts %}
+    {{ super() }}
+    <script type='text/javascript' src="{{ url_for('static', filename='questions.js') }}"></script>
+  {% endblock %}
+{% endblock %}

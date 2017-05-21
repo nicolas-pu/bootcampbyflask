@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block title %} Question {% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='questions.css') }}">
+{% endblock %}
+
+{% block page_content %}
+    
+  <ol class="breadcrumb">
+      <li><a href="{{ url_for('questions.allquestions') }}">Questions</a></li>
+    <li class="active">Question</li>
+  </ol>
+  <div class="row question" question-id="{{ question.id }}">
+    <div class="col-md-1 options">
+      {% if user in question.get_favoriters() %}
+        <span class="glyphicon glyphicon-star favorite favorited" title="Click to mark this question as favorite; click again to toggle"></span>
+      {% else %}
+        <span class="glyphicon glyphicon-star-empty favorite" title="Click to mark this question as favorite; click again to toggle"></span>
+      {% endif %}
+      <span class="favorite-count">{{ question.favorites }}</span>
+    </div>
+    <div class="col-md-11">
+      <h2>{{ question.title }}</h2>
+      <div class="question-user">
+          <a href=""><img src="{{question.user.get_picture()}}" class="user"></a>
+        <a href="" class="username">{{ question.user.get_screen_name() }}</a>
+        <small class="asked">asked {{ question.update_date }}</small>
+      </div>
+      <div class="question-description">
+        {{ question.description }}
+      </div>
+      {% if question.get_tags() %}
+        <p>
+          {% for tag in question.get_tags() %}
+            <span class="label label-primary">{{ tag.tag }}</span>
+          {% endfor %}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+  <h4 class="page-header">Answers</h4>
+  <div class="answers">
+    {% for answer in question.get_answers() %}
+    {% endfor %}
+    <h4>Your Answer</h4>
+    {{ wtf.quick_form(form) }}
+  </div>
+{% endblock %}

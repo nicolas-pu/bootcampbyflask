@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html'as wtf %}
+{% block title %} Write {% endblock %}
+{% block head %}
+    {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='articles.css', _external=True) }}" type='text/css'>
+{% endblock %}
+{% block page_content %}
+    <div class="container">
+  <ol class="breadcrumb">
+      <li><a href="{{ url_for('articles.allarticles') }}">Articles</a></li>
+    <li class="active">Write Article</li>
+  </ol>
+  {{ wtf.quick_form(form) }}
+    <div class="form-group">
+      <button type="button" class="btn btn-primary publish">Publish</button>
+      <button type="button" class="btn btn-default draft">Save Draft</button>
+      <button type="button" class="btn btn-default preview" data-toggle="modal" data-target="#preview">Preview</button>
+      <a href="" class="btn btn-default">Cancel</a>
+    </div>
+
+  <div class="modal fade" id="preview">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Article Preview</h4>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+{% block scripts %}
+{{ super() }}
+<script type='text/javascript' src='{{ url_for('static', filename='articles.js') }}'></script>
+    
+{% endblock %}
+{% endblock %}

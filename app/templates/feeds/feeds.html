@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% import "_macros.html" as macros %}
+{% block title %} Feeds {% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='feeds.css', _external=True) }}" type="text/css">
+{% endblock %}
+
+
+{% block page_content %}
+<h1>Feeds</h1>
+<ul class="stream">
+    {% for feed in feeds %}
+        {% include 'feeds/_feed.html' %}
+    {% endfor %}
+</ul>
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, 'feeds.feeds') }}
+</div>
+{% endblock %}

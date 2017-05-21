@@ -1,0 +1,7 @@
+<li feed-id="{{ feed.id }}">
+    <div class="feed-container">
+        <a href="#"><img src="{{ feed.user.get_picture()  }}" class="user"></a>
+        <h3><a href="{{ url_for('main.user', username=feed.user.username) }}">{{ feed.user.get_screen_name() }}</a><small>{{ feed.date  }}</small></h3>
+        <p>{{ feed.post }}</p>
+    </div>
+</li>

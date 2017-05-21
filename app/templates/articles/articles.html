@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %} Articles {% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='articles.css') }}">
+{% endblock %}
+
+{% block page_content %}
+    
+  <div class="page-header">
+      <a href="{{ url_for('articles.write') }}" class="btn btn-primary pull-right">
+      <span class="glyphicon glyphicon-pencil"></span> Write Article
+    </a>
+    <a href="{{ url_for('articles.drafts') }}" class="btn btn-default pull-right" style="margin-right: .8em"> Drafts </a>
+    <h1> Articles </h1>
+  </div>
+  <div class="row">
+    <div class="col-md-10">
+      <div class="articles">
+        {% if articles %}
+        {% for article in articles %}
+            {% include 'articles/_article.html' %}
+        {% endfor %}
+        {% else %}
+        <h4 class="no-data">There is no published articles yet. <a href="">Be the first one to publish!</a></h4>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-2 popular-tags">
+      <h4>Popular Tags</h4>
+      {% if popular_tags %}
+      {% for tag, count in popular_tags %}
+      <a href="{{ url_for('articles.tag', tag=tag) }}"><span class="label label-default">{{ count }}{{ tag }}</span></a>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+    </div>
+  </div>
+{% endblock %}

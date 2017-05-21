@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %} Drafts {% endblock %}
+
+{% block page_content %}
+
+
+  <ol class="breadcrumb">
+      <li><a href="{{ url_for('articles.allarticles') }}">Articles</a></li>
+    <li class="active">Drafts</li>
+  </ol>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Tags</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if drafts %}
+      {% for article in drafts %}
+        <tr>
+            <td><a href="{{ url_for('articles.edit', id=article.id) }}">{{ article.title }}</a></td>
+            <td>{{ article.content }} </td>
+          <td>
+            {% for tag in article.get_tags() %}
+              <span class="label label-default">{{ tag }}</span>
+            {% endfor %}
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="4" style="text-align: center">
+            No draft to display
+          </td>
+        </tr>
+      {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+
+
+
+{% endblock %}

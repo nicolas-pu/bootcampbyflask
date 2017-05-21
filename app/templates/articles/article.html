@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %} {{ article.title }} {% endblock %}
+
+{% block page_content %}
+<ol class="breadcrumb">
+    <li><a href="{{ url_for('articles.allarticles') }}">Articles</a></li>
+    <li class="active">Article</li>
+</ol>
+{% include 'articles/_article.html' %}
+
+{% endblock %}
