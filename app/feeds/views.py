@@ -19,4 +19,4 @@ def feeds():
     
     feeds = pagination.items
 
-    return render_template('feeds/feeds.html', feeds=feeds, pagination=pagination)
+    return render_template('feeds/feeds.html', feeds=pagination.items, pagination=pagination)

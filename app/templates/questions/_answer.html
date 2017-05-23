@@ -1,0 +1,26 @@
+
+<div class="row answer" answer-id="{{ answer.id }}">
+  <div class="col-md-1 options">
+    <span class="glyphicon glyphicon-chevron-up vote up-vote{% if user in answer.get_up_voters %} voted{% endif %}" title="Click to up vote; click again to toggle"></span>
+    <span class="votes">{{ answer.votes }}</span>
+    <span class="glyphicon glyphicon-chevron-down vote down-vote{% if user in answer.get_down_voters %} voted{% endif %}" title="Click to down vote; click again to toggle"></span>
+    {% if answer.is_accepted and current_user == question.user %}
+      <span class="glyphicon glyphicon-ok accept accepted" title="Click to unaccept the answer"></span>
+    {% elif answer.is_accepted %}
+      <span class="glyphicon glyphicon-ok accept accepted" style="cursor: default"></span>
+    {% elif current_user == question.user %}
+      <span class="glyphicon glyphicon-ok accept" title="Click to accept the answer"></span>
+    {% endif %}
+  </div>
+  <div class="col-md-11">
+    <div class="answer-user">
+      <a href=""><img src="{{ answer.user.get_picture() }}" class="user"></a>
+      <a href="" class="username">{{ answer.user.get_screen_name() }}</a>
+      <small class="answered">answered {{ answer.create_date }}</small>
+    </div>
+    <div class="answer-description">
+      {{ answer.description }}
+    </div>
+  </div>
+</div>
+<hr>

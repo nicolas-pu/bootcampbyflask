@@ -23,6 +23,7 @@ class User(UserMixin, db.Model):
     articles = db.relationship('Article', backref='user', lazy='dynamic')
     questions = db.relationship('Question', backref='user', lazy='dynamic')
     answers = db.relationship('Answer', backref='user', lazy='dynamic')
+    activitys = db.relationship('Activity', backref='user', lazy='dynamic')
     
 
 
@@ -181,7 +182,7 @@ class Question(db.Model):
         return Question.query.filter_by(has_accepted_answer=True)
 
     def get_answers(self):
-        return Answer.query.filter_by(question=self)
+        return Answer.query.filter_by(question=self).order_by(Answer.create_date.desc())
 
     def get_description_preview(self):
         if len(self.description) > 255:
@@ -195,7 +196,18 @@ class Question(db.Model):
     def get_favoriters(self):
         favoriters = []
         return favoriters
+
+    def calculate_favorites(self):
+        favorites = Activity.query.filter_by(activity_type=Activity.FAVORITE, question=self.id).count()
+        self.favorites = favorites
+        return self.favorites
     
+    def get_favoriters(self):
+        favorites = Activity.query.filter_by(activity_type=Activity.FAVORITE, question=self.id)
+        favoriters = []
+        for favorite in favorites:
+            favoriters.append(favorite.user)
+        return favoriters
 
 class QTag(db.Model):
     __tablename__ = 'qtags'
@@ -218,4 +230,22 @@ class Answer(db.Model):
     votes = db.Column(db.Integer, default=0)
     is_accepted = db.Column(db.Boolean, default=False)
 
-    
+    def accept(self):
+        answers = Answer.query.all()
+        for answer in answers:
+            answer.is_accepted = False
+        self.is_accepted = True
+        question = Question.query.filter_by(id=self.question_id).first()
+        question.has_accepted_answer = True
+
+class Activity(db.Model):
+    __tablename__ = 'activities'
+    FAVORITE = 'F'
+    LIKE = 'L'
+    DOWN_VOTE = 'D'
+    UP_VOTE = 'U'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    activity_type = db.Column(db.String(1))
+    question = db.Column(db.Integer)
+    answer = db.Column(db.Integer)

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% import '_macros.html' as macros %}
 
 {% block title %} Questions {% endblock %}
 {% block head %}
@@ -16,9 +17,9 @@
   </div>
   <div class="questions">
     <ul class="nav nav-tabs" style="margin-bottom: 1.4em">
-      <li{% if active == 'unanswered' %} class="active"{% endif %}><a href="">Unanswered</a></li>
-      <li{% if active == 'answered' %} class="active"{% endif %}><a href="">Answered</a></li>
-      <li{% if active == 'all' %} class="active"{% endif %}><a href="">All Questions</a></li>
+        <li{% if active == 'unanswered' %} class="active"{% endif %}><a href="{{url_for('questions.unswered')}}">Unanswered</a></li>
+      <li{% if active == 'answered' %} class="active"{% endif %}><a href="{{ url_for('questions.answered') }}">Answered</a></li>
+      <li{% if active == 'all' %} class="active"{% endif %}><a href="{{ url_for('questions.allquestions') }}">All Questions</a></li>
     </ul>
     {% if questions %}
     {% for question in questions %}
@@ -28,9 +29,7 @@
       <h4 class="no-data">No question to display</h4>
     {% endif %}
   </div>
-    
-  {% block scripts %}
-    {{ super() }}
-    <script type='text/javascript' src="{{ url_for('static', filename='questions.js') }}"></script>
-  {% endblock %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, 'questions.allquestions') }}
+</div>
 {% endblock %}

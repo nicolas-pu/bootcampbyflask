@@ -4,6 +4,7 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='questions.css') }}">
+
 {% endblock %}
 
 {% block page_content %}
@@ -14,7 +15,7 @@
   </ol>
   <div class="row question" question-id="{{ question.id }}">
     <div class="col-md-1 options">
-      {% if user in question.get_favoriters() %}
+      {% if current_user in question.get_favoriters() %}
         <span class="glyphicon glyphicon-star favorite favorited" title="Click to mark this question as favorite; click again to toggle"></span>
       {% else %}
         <span class="glyphicon glyphicon-star-empty favorite" title="Click to mark this question as favorite; click again to toggle"></span>
@@ -25,7 +26,7 @@
       <h2>{{ question.title }}</h2>
       <div class="question-user">
           <a href=""><img src="{{question.user.get_picture()}}" class="user"></a>
-        <a href="" class="username">{{ question.user.get_screen_name() }}</a>
+          <a href="{{ url_for('main.user', username=question.user.username) }}" class="username">{{ question.user.get_screen_name() }}</a>
         <small class="asked">asked {{ question.update_date }}</small>
       </div>
       <div class="question-description">
@@ -43,6 +44,7 @@
   <h4 class="page-header">Answers</h4>
   <div class="answers">
     {% for answer in question.get_answers() %}
+        {% include 'questions/_answer.html' %}
     {% endfor %}
     <h4>Your Answer</h4>
     {{ wtf.quick_form(form) }}

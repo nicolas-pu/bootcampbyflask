@@ -68,6 +68,7 @@
 {% endblock %}
 
 {% block scripts %}
-{{ super() }}
-{{ moment.include_moment() }}
+    {{ super() }}
+<script type='text/javascript' src='{{ url_for('static', filename='questions.js') }}'></script>
+<script type='text/javascript' src='{{ url_for('static', filename='articles.js') }}'></script>
 {% endblock %}

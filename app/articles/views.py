@@ -12,7 +12,11 @@ from .. import db
 def allarticles():
    articles = Article.get_published()
    popular_tags = Tag.get_popular_tags()
-   return render_template('articles/articles.html', articles=articles, popular_tags=popular_tags)
+   page = request.args.get('page', 1, type=int)
+   paginator = Article.query.order_by(Article.create_date).paginate(
+           page, per_page=10, error_out=False  
+           )
+   return render_template('articles/articles.html', articles=paginator.items, popular_tags=popular_tags, pagination=paginator)
 
 
 
