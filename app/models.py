@@ -24,6 +24,9 @@ class User(UserMixin, db.Model):
     questions = db.relationship('Question', backref='user', lazy='dynamic')
     answers = db.relationship('Answer', backref='user', lazy='dynamic')
     activitys = db.relationship('Activity', backref='user', lazy='dynamic')
+
+    def __str__(self):
+        return self.username
     
 
 
@@ -84,6 +87,8 @@ class Feed(db.Model):
     post = db.Column(db.Text())
     date = db.Column(db.DateTime, index=True, default=datetime.now)
 
+    
+
 
 class Article(db.Model):
     __tablename__ = 'articles'
@@ -102,6 +107,8 @@ class Article(db.Model):
     create_date = db.Column(db.DateTime, index=True, default=datetime.now)
     update_date = db.Column(db.DateTime, index=True)
 
+    def __str__(self):
+        return self.title
     @staticmethod
     def get_published():
         articles = Article.query.filter_by(status=Article.PUBLISHED).order_by(Article.create_date.desc())
@@ -166,6 +173,8 @@ class Question(db.Model):
     tags = db.relationship('QTag', backref='question', lazy='dynamic')
     answers = db.relationship('Answer', backref='question', lazy='dynamic')
 
+    def __str__(self):
+        return self.title
     def create_tags(self, tags):
         tags = tags.strip()
         tag_list = tags.split(' ')
@@ -230,6 +239,7 @@ class Answer(db.Model):
     votes = db.Column(db.Integer, default=0)
     is_accepted = db.Column(db.Boolean, default=False)
 
+
     def accept(self):
         answers = Answer.query.all()
         for answer in answers:
@@ -249,3 +259,4 @@ class Activity(db.Model):
     activity_type = db.Column(db.String(1))
     question = db.Column(db.Integer)
     answer = db.Column(db.Integer)
+

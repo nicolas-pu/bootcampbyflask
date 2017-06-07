@@ -5,6 +5,8 @@ from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_moment import Moment
 from flask_pagedown import PageDown
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 db = SQLAlchemy()
 bootstrap = Bootstrap()
 moment = Moment()
@@ -12,6 +14,7 @@ login_manager = LoginManager()
 login_manager.session_pretection = 'strong'
 login_manager.login_view = 'auth.login'
 pagedown = PageDown()
+admin = Admin()
 
 
 def create_app(config_name):
@@ -22,6 +25,11 @@ def create_app(config_name):
     bootstrap.init_app(app)
     config[config_name].init_app(app)
     login_manager.init_app(app)
+    admin.init_app(app)
+    from .models import Article
+    from .models import Question
+    admin.add_view(ModelView(Article, db.session))
+    admin.add_view(ModelView(Question, db.session))
 
     from .auth import auth as auth_blueprint
     from .feeds import feeds as feeds_blueprint
